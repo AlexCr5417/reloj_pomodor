@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="header">Reloj pomodoro</div>
+      <div id="navbar"></div>
+      <div id="main">
+        <div class="header_main"></div>
+        <div class="clock_main">
+          <div class="clock_cycles_main">0/0</div>
+          <div class="clock_timer_main">00:00:00</div>
+        </div>
+        <div class="buttons_main">
+          <div class="buttons_main_container"></div>
+        </div>
+        <div class="table_main"></div>
+      </div>
+    </div>
+    <div class="overlay">
+      <div class="form_clock">
+        <div class="form_clock_header">
+          <div class="form_clock_header_title">Configuracion temporizador</div>
+        </div>
+        <div class="form_clock_main">
+          <div class="cycle">
+            <div class="repeat">
+              <div class="cycle_title">Repeticiones</div>
+              <input
+                class="repeat_number"
+                type="number"
+                name=""
+                id=""
+                value="1"
+              />
+            </div>
+            <div class="cycle_title">Ciclo</div>
+            <div class="container_cycles">
+              <div class="cycle_card" id="cycle_card_1">
+                <input
+                  class="cycle_card_title"
+                  type="text"
+                  name=""
+                  id=""
+                  value="Bloque 1"
+                />
+                <div class="cycle_card_timer">
+                  <input
+                    class="cycle_card_timer_content"
+                    type="number"
+                    name=""
+                    id=""
+                    min="0"
+                    placeholder="horas"
+                  />
+                  <input
+                    class="cycle_card_timer_content"
+                    type="number"
+                    name=""
+                    id=""
+                    min="0"
+                    max="60"
+                    placeholder="minutos"
+                  />
+                  <input
+                    class="cycle_card_timer_content"
+                    type="number"
+                    name=""
+                    id=""
+                    min="0"
+                    max="60"
+                    placeholder="segundos"
+                  />
+                </div>
+                <div class="cycle_card_options">-</div>
+              </div>
+            </div>
+            <div class="cycle_card_plus">+ Añadir bloque</div>
+          </div>
+        </div>
+        <div class="form_clock_footer">
+          <div
+            id="form_clock_footer_button_cancel"
+            class="form_clock_footer_button"
+          >
+            Cancelar
+          </div>
+          <div
+            id="form_clock_footer_button_save"
+            class="form_clock_footer_button"
+          >
+            Guardar
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

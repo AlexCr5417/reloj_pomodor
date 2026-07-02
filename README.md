@@ -1,1 +1,1 @@
-# reloj_pomodor
+# reloj_pomodoro

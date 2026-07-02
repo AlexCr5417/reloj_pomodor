@@ -1,0 +1,231 @@
+:root {
+  --background_color: #1e1e1e;
+  --background_color_low: #313131;
+  --color-text: white;
+  --color_button_save: #22c55e;
+  --color_button_cancel: #ef4444;
+}
+* {
+  margin: 0;
+  background-color: var(--background_color);
+  color: var(--color-text);
+}
+
+#container {
+  display: grid;
+  grid-template-columns: 70px auto;
+  grid-template-rows: 10vh 90vh;
+  grid-template-areas:
+    "header header"
+    "navbar main";
+}
+#header {
+  grid-area: header;
+  font-size: 40px;
+  text-align: center;
+  align-content: center;
+  border-bottom: 1px solid rgba(130, 130, 130, 0.2);
+}
+#navbar {
+  grid-area: navbar;
+  border-right: 1px solid rgba(130, 130, 130, 0.2);
+}
+
+#main {
+  grid-area: main;
+  display: grid;
+  grid-template-rows: 10vh 40vh 10vh 40vh;
+  grid-template-areas:
+    "header_main"
+    "clock_main"
+    "buttons_main"
+    "table_main";
+  border-bottom: 1px solid rgba(130, 130, 130, 0.2);
+}
+.header_main {
+  grid-area: header_main;
+}
+.clock_main {
+  grid-area: clock_main;
+  display: grid;
+  grid-template-rows: 10% 80%;
+  grid-template-areas:
+    "cycles"
+    "timer";
+}
+.clock_cycles_main {
+  text-align: right;
+  align-content: center;
+  font-size: 30px;
+}
+.clock_timer_main {
+  text-align: center;
+  align-content: center;
+  font-size: 200px;
+}
+.buttons_main {
+  grid-area: buttons_main;
+  display: flex;
+  justify-content: center;
+}
+.buttons_main_container {
+  margin: 10px;
+  display: flex;
+  gap: 10px;
+  height: 40px;
+}
+.clock_button {
+  text-align: center;
+  align-content: center;
+  font-size: 20px;
+  padding: 8px;
+}
+.clock_button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+.table_main {
+  grid-area: table_main;
+}
+
+/*formulario del reloj*/
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.form_clock {
+  width: 400px;
+  height: 550s0px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background_color_low);
+}
+.form_clock_header {
+  background-color: var(--background_color);
+  height: 50px;
+  display: flex;
+}
+.form_clock_header_title {
+  width: calc(550px - 50px);
+  font-size: 20px;
+  align-content: center;
+}
+.form_clock_header_button {
+  height: 50px;
+  width: 50px;
+  font-size: 40px;
+  text-align: center;
+}
+.form_clock_header_button {
+  cursor: pointer;
+  opacity: 0.8;
+}
+.form_clock_main {
+  height: calc(550px - 50px - 50px);
+  background-color: var(--background_color_low);
+  border-bottom: 2px solid rgba(130, 130, 130, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px;
+}
+.form_clock_footer {
+  width: calc(400px - 2 * 5px);
+  height: 50px;
+  background-color: var(--background_color_low);
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  padding: 5px;
+  align-items: center;
+}
+
+.form_clock_footer_button {
+  height: 30px;
+  padding: 0px 5px 0px 5px;
+  align-content: center;
+  font-size: 15px;
+}
+.form_clock_footer_button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+#form_clock_footer_button_save {
+  background-color: var(--color_button_save);
+}
+#form_clock_footer_button_cancel {
+  background-color: #ef4444;
+}
+
+.cycle_title {
+  font-size: 20px;
+  background-color: var(--background_color_low);
+}
+/*--container cycles----*/
+.container_cycles {
+  background-color:  var(--background_color_low);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 1px solid;
+}
+.cycle_card {
+  display: grid;
+  grid-template-rows: 2fr;
+  grid-template-columns: 95% 5%;
+  grid-template-areas:
+    "cycle_card_title cycle_card_options"
+    "cycle_card_timer cycle_card_options";
+  border: 1px #313131;
+}
+.cycle_card_title {
+  grid-area: cycle_card_title;
+  font-size: 15px;
+  border: 0px;
+  height: 20px;
+}
+.cycle_card_timer {
+  width: 100%;
+  grid-area: cycle_card_timer;
+  display: flex;
+}
+.cycle_card_timer_content {
+  font-size: 15px;
+  width: 100%;
+  border: 0px;
+  height: 30px;
+}
+.cycle_card_options {
+  grid-area: cycle_card_options;
+  align-content: center;
+  text-align: center;
+}
+.repeat {
+  background-color: var(--background_color_low);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.repeat_number {
+  border: 0px;
+  font-size: 15px;
+  height: 30px;
+  width: 100%;
+}
+.cycle_card_plus{
+  background-color: var(--background_color_low);
+  text-align: end;
+  font-size: 13px
+}
+.cycle_card_plus:hover{
+  cursor: pointer;
+  color: var(--color_button_save);
+}
