@@ -229,3 +229,20 @@
   cursor: pointer;
   color: var(--color_button_save);
 }
+
+/* Animaciones*/
+/* Animacion para el Zen */
+@keyframes zen-glow {
+  0% {background-color: var(--background_color);}
+  50% {background-color: #3B0764;} /* Violeta profundo */
+  100% {background-color: var(--background_color);}
+}
+
+/* Animacion para la alerta */
+@keyframes alert-glow {
+  0%, 100% {background-color: var(--background_color);}
+  25%, 75% {background-color: #7F1D1D;} /* Rojo sangre de alerta */
+}
+
+.flash-zen { animation: zen-glow 3s ease-in-out 1;}
+.flash-alert {animation: alert-glow 0.6s ease-in-out 3;}

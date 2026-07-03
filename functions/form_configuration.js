@@ -49,6 +49,8 @@ export function reiniciar_configuracion() {
 export function save_form_configuration() {
   //data
   let repeats = Number(document.querySelector(".repeat_number").value);
+  // Añado un nuevo dato para capturar el valor de la alarma
+  let alarmaSelected = Number(document.querySelector("#alarm_mood")?.value || 2);
   let cyclesOnSeconds = [];
   document.querySelectorAll(".cycle_card_timer").forEach((cycle, index) => {
     const timers = cycle.querySelectorAll(".cycle_card_timer_content");
@@ -64,6 +66,7 @@ export function save_form_configuration() {
   let clock = {
     repeat: repeats,
     cycle: cyclesOnSeconds,
+    alarmType: alarmaSelected
   };
   localStorage.setItem("cycles", JSON.stringify(clock));
 }
@@ -140,5 +143,61 @@ export function newCard_CycleContainer() {
               </div>
   `,
     );
+  }
+}
+
+// EVENTOS DE INTERACTIVIDAD PARA LA ALARMA
+
+//Se ejecutara automaticamente al arrastrar el control deslizandte
+document.querySelector("#alarm_mood")?.addEventListener("input", (e) => {
+  const valorNumerico = Number(e.target.value);
+
+  //Aqui añadimos la logica visual
+  document.querySelectorAll(".alarm_labels span").forEach(s => s.classList.remove("active_mood"));
+  if(valorNumerico === 1){
+    document.querySelector("#label_zen").classList.add("active_mood");
+  }else if(valorNumerico === 2){
+    document.querySelector("#label_active").classList.add("active_mood");
+  }else if(valorNumerico === 3){
+    document.querySelector("#label_alert").classList.add("active_mood");
+  }
+
+  // Aqui añadimos la logica auditiva para que se oiga la alarma
+  reproducirVistaPreviaAlarma(valorNumerico);
+});
+
+// Aqui voy a realizar una funcion interna para generar el sonido de prueba sin necesidad de ficheros externos
+function reproducirVistaPreviaAlarma(tipo) {
+  const audioCtx = new (window.AudioContext || window.WebkitAudioContext)();
+  const osc = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  osc.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  if (tipo === 1){
+    // Vista previa del modo Zen: sonido bajo, suave
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.4);
+  }else if(tipo === 2){
+    // Vista previa Activo: una campanada limpia e intermedia
+    osc.type = 'triangle';
+    osc.frequency.setTargetAtTime(440, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
+  }else if(tipo === 3){
+    // Vista previa Alerta: Un pulso estridente, corto y directo
+    osc.type = 'sawtooth';
+    osc.frequency.setTargetAtTime(780, audioCtx.currentTime);
+    gainNode.gain.setTargetAtTime(0.15, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.15);
   }
 }
