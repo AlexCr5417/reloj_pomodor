@@ -18,47 +18,56 @@ export function restart_clock() {
 
 export async function run_clock() {
   let data = JSON.parse(localStorage.getItem("cycles"));
-  let repeats = data.repeat;
-  let cycles = data.cycle;
 
-  for (let repeat = 0; repeat < repeats; repeat++) {
-    for (let cycle = 0; cycle < cycles.length; cycle++) {
-      await run_timer(cycles[cycle]);
+  if (data) {
+    //hacemos que cualquier otro reloj ejecutandose termine
+    if (intervalo) {
+      clearInterval(intervalo);
     }
+    //ocultar el boton de iniciar y mostrar el boton de pausa
+    swapButtons("#button_clock_iniciar", "#button_clock_pausar");
+
+    let repeats = data.repeat;
+    let cycles = data.cycle;
+    let tipoAlarma = data.tipoAlarma;
+    let body = document.body;
+    let clock = document.querySelector(".clock_timer_main");
+
+    //si no hay reloj para cambiar, dar un error.
+    if (!clock) throw new Error("No se encontró el elemento .clock_timer_main");
+
+    //corremos el reloj en bucle
+    for (let repeat = 0; repeat < repeats; repeat++) {
+      for (let cycle = 0; cycle < cycles.length; cycle++) {
+        await run_timer(cycles[cycle], clock);
+
+        // Disparamos la transicion sonora en el body
+        ejecutarAlarmaInmersiva(tipoAlarma ? Number(tipoAlarma) : 2, body);
+      }
+    }
+    swapButtons("#button_clock_pausar", "#button_clock_iniciar"); //volvemos a mosta
+  }
+
+  function swapButtons(hide, show) {
+    document.querySelector(hide).style.display = "none";
+    document.querySelector(show).style.display = "flex";
   }
 }
 let intervalo;
-export function run_timer(seconds) {
-  let clock = document.querySelector(".clock_timer_main");
-
-  // Añadimos una nueva variable
-  let body = document.body;
-
+export function run_timer(seconds, elemtHtml) {
   return new Promise((resolve) => {
     let time = seconds;
 
+    elemtHtml.textContent = secondsToHHMMSS(time); //para que no tarde un segundo en actualizar el reloj
     intervalo = setInterval(() => {
-      if (time <= 0) {
-        clock.textContent = `00:00:00`;
-        clearInterval(intervalo);
-        
-        const datosGuardados = localStorage.getItem("cycles");
-        let tipoAlarma = 2;
-
-        if(datosGuardados){
-          const data = JSON.parse(datosGuardados);
-          if(data.tipoAlarma !== undefined){
-            tipoAlarma = Number(data.alarmType);
-          }
-        }
-
-        // Disparamos la transicion sonora en el body
-        ejecutarAlarmaInmersiva(tipoAlarma, body);
-
-        resolve("terminó");
-      }
-      clock.textContent = secondsToHHMMSS(time);
       time--;
+      if (time <= 0) {
+        clearInterval(intervalo);
+        elemtHtml.textContent = `00:00:00`;
+        resolve("termino");
+      } else {
+        elemtHtml.textContent = secondsToHHMMSS(time);
+      }
     }, 1000);
   });
 }
@@ -73,9 +82,9 @@ function ejecutarAlarmaInmersiva(tipo, elementoBody) {
   osc.connect(gainNode);
   gainNode.connect(audioCtx.destination);
 
-  if(tipo === 1){
+  if (tipo === 1) {
     //Modo Zen: Frecuencia profunda expansiva + destello violeta lento en pantalla
-    osc.type = 'sine';
+    osc.type = "sine";
     osc.frequency.setValueAtTime(140, audioCtx.currentTime);
     gainNode.gain.setValueAtTime(0.6, audioCtx.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3); // Esto realizara un eco largo
@@ -85,9 +94,9 @@ function ejecutarAlarmaInmersiva(tipo, elementoBody) {
 
     osc.start();
     osc.stop(audioCtx.currentTime + 3);
-  }else if(tipo === 3){
+  } else if (tipo === 3) {
     //Modo Alerta Maxima: Sonido ritmico aserrado + rafagas rojas
-    osc.type = 'sawtooth';
+    osc.type = "sawtooth";
     osc.frequency.setValueAtTime(840, audioCtx.currentTime);
     gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
 
@@ -96,7 +105,7 @@ function ejecutarAlarmaInmersiva(tipo, elementoBody) {
 
     osc.start();
     osc.stop(audioCtx.currentTime + 1.8);
-  }else{
+  } else {
     // Modo Activo: Campana armonica estandar
     osc.type = "triangle";
     osc.frequency.setValueAtTime(440, audioCtx.currentTime);
@@ -112,6 +121,8 @@ export function localStorage_cycles() {
   console.log(localStorage.getItem("cycles"));
 }
 
-export function stop_clock() {
+export function pause_clock() {
   clearInterval(intervalo);
+  document.querySelector("#button_clock_pausar").style.display = "none";
+  document.querySelector("#button_clock_iniciar").style.display = "flex";
 }
