@@ -1,11 +1,13 @@
 //funciones formulario de configuracion
-export function ocultar_configuracion() {
-  let form_clock = document.querySelector(".overlay");
-  form_clock.style.display = "none";
-}
-export function reiniciar_configuracion() {
-  let container = document.querySelector(".container_cycles");
-  container.innerHTML = `
+ export const form_configuration = {
+  //funciones pirncipales
+  ocultar: () => {
+    let form_clock = document.querySelector(".overlay");
+    form_clock.style.display = "none";
+  },
+  reiniciar: () => {
+    let container = document.querySelector(".container_cycles");
+    container.innerHTML = `
   <div class="cycle_card" id="cycle_card_1">
                 <input
                   class="cycle_card_title"
@@ -45,64 +47,67 @@ export function reiniciar_configuracion() {
                 <div class="cycle_card_options">:</div>
               </div>
   `;
-}
-export function save_form_configuration() {
-  //data
-  let repeats = Number(document.querySelector(".repeat_number").value);
-  // Añado un nuevo dato para capturar el valor de la alarma
-  let alarmaSelected = Number(document.querySelector("#alarm_mood")?.value || 2);
-  let cyclesOnSeconds = [];
-  document.querySelectorAll(".cycle_card_timer").forEach((cycle, index) => {
-    const timers = cycle.querySelectorAll(".cycle_card_timer_content");
-    const hours = Number(timers[0].value);
-    const minutes = Number(timers[1].value);
-    const seconds = Number(timers[2].value);
-    const result = hours * 3600 + minutes * 60 + seconds;
-    cyclesOnSeconds.push(result);
+  },
+  guardar: () => {
+    //data
+    let repeats = Number(document.querySelector(".repeat_number").value);
+    // Añado un nuevo dato para capturar el valor de la alarma
+    let alarmaSelected = Number(
+      document.querySelector("#alarm_mood")?.value || 2,
+    );
+    let cyclesOnSeconds = [];
+    document.querySelectorAll(".cycle_card_timer").forEach((cycle, index) => {
+      const timers = cycle.querySelectorAll(".cycle_card_timer_content");
+      const hours = Number(timers[0].value);
+      const minutes = Number(timers[1].value);
+      const seconds = Number(timers[2].value);
+      const result = hours * 3600 + minutes * 60 + seconds;
+      cyclesOnSeconds.push(result);
+    });
 
-  });
+    //resultado
+    let clock = {
+      repeat: repeats,
+      cycle: cyclesOnSeconds,
+      alarmType: alarmaSelected,
+    };
+    localStorage.setItem("cycles", JSON.stringify(clock));
+  },
+  //funciones de el ciclo
+  cycle: {
+    new_card: () => {
+      let container = document.querySelector(".container_cycles");
+      let cards = container.querySelectorAll(".cycle_card");
+      let lastCard = cards[cards.length - 1];
+      let lastCardId = 0;
+      if (cards.length > 0) {
+        lastCardId = Number(lastCard.id.split("_")[2]);
+      }
 
-  //resultado
-  let clock = {
-    repeat: repeats,
-    cycle: cyclesOnSeconds,
-    alarmType: alarmaSelected
-  };
-  localStorage.setItem("cycles", JSON.stringify(clock));
-}
-export function newCard_CycleContainer() {
-  let container = document.querySelector(".container_cycles");
-  let cards = container.querySelectorAll(".cycle_card");
-  let lastCard = cards[cards.length - 1];
-  let lastCardId = 0;
-  if (cards.length > 0) {
-    lastCardId = Number(lastCard.id.split("_")[2]);
-  }
+      let lastContent = lastCard.querySelectorAll(".cycle_card_timer_content");
+      const hours = Number(lastContent[0].value);
+      const minutes = Number(lastContent[1].value);
+      const seconds = Number(lastContent[2].value);
+      let lastTimer = hours + minutes + seconds;
 
-  let lastContent = lastCard.querySelectorAll(".cycle_card_timer_content");
-  const hours = Number(lastContent[0].value);
-  const minutes = Number(lastContent[1].value);
-  const seconds = Number(lastContent[2].value);
-  let lastTimer = hours + minutes + seconds;
+      if (lastTimer <= 0) {
+        console.log("el ultimo bloque no contiene niguna unidad de tiempo.");
+      } else {
+        //añadimos los valores faltantes a la ultima card
+        if (hours <= 0) {
+          lastContent[0].value = "00";
+        }
+        if (minutes <= 0) {
+          lastContent[1].value = "00";
+        }
+        if (seconds <= 0) {
+          lastContent[2].value = "00";
+        }
 
-  if (lastTimer <= 0) {
-    console.log("el ultimo bloque no contiene niguna unidad de tiempo.");
-  } else {
-    //añadimos los valores faltantes a la ultima card
-    if (hours <= 0) {
-      lastContent[0].value = "00";
-    }
-    if (minutes <= 0) {
-      lastContent[1].value = "00";
-    }
-    if (seconds <= 0) {
-      lastContent[2].value = "00";
-    }
-
-    //inyeccion de la card en elk formulario
-    container.insertAdjacentHTML(
-      "beforeend",
-      `
+        //inyeccion de la card en elk formulario
+        container.insertAdjacentHTML(
+          "beforeend",
+          `
   <div class="cycle_card" id="cycle_card_${lastCardId + 1}">
                 <input
                   class="cycle_card_title"
@@ -142,9 +147,11 @@ export function newCard_CycleContainer() {
                 <div class="cycle_card_options">:</div>
               </div>
   `,
-    );
-  }
-}
+        );
+      }
+    },
+  },
+};
 
 // EVENTOS DE INTERACTIVIDAD PARA LA ALARMA
 
@@ -153,12 +160,14 @@ document.querySelector("#alarm_mood")?.addEventListener("input", (e) => {
   const valorNumerico = Number(e.target.value);
 
   //Aqui añadimos la logica visual
-  document.querySelectorAll(".alarm_labels span").forEach(s => s.classList.remove("active_mood"));
-  if(valorNumerico === 1){
+  document
+    .querySelectorAll(".alarm_labels span")
+    .forEach((s) => s.classList.remove("active_mood"));
+  if (valorNumerico === 1) {
     document.querySelector("#label_zen").classList.add("active_mood");
-  }else if(valorNumerico === 2){
+  } else if (valorNumerico === 2) {
     document.querySelector("#label_active").classList.add("active_mood");
-  }else if(valorNumerico === 3){
+  } else if (valorNumerico === 3) {
     document.querySelector("#label_alert").classList.add("active_mood");
   }
 
@@ -175,28 +184,37 @@ function reproducirVistaPreviaAlarma(tipo) {
   osc.connect(gainNode);
   gainNode.connect(audioCtx.destination);
 
-  if (tipo === 1){
+  if (tipo === 1) {
     // Vista previa del modo Zen: sonido bajo, suave
-    osc.type = 'sine';
+    osc.type = "sine";
     osc.frequency.setValueAtTime(160, audioCtx.currentTime);
     gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioCtx.currentTime + 0.4,
+    );
     osc.start();
     osc.stop(audioCtx.currentTime + 0.4);
-  }else if(tipo === 2){
+  } else if (tipo === 2) {
     // Vista previa Activo: una campanada limpia e intermedia
-    osc.type = 'triangle';
+    osc.type = "triangle";
     osc.frequency.setTargetAtTime(440, audioCtx.currentTime);
     gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioCtx.currentTime + 0.3,
+    );
     osc.start();
     osc.stop(audioCtx.currentTime + 0.3);
-  }else if(tipo === 3){
+  } else if (tipo === 3) {
     // Vista previa Alerta: Un pulso estridente, corto y directo
-    osc.type = 'sawtooth';
+    osc.type = "sawtooth";
     osc.frequency.setTargetAtTime(780, audioCtx.currentTime);
     gainNode.gain.setTargetAtTime(0.15, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioCtx.currentTime + 0.15,
+    );
     osc.start();
     osc.stop(audioCtx.currentTime + 0.15);
   }

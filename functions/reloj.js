@@ -1,58 +1,65 @@
 import { secondsToHHMMSS } from "../utils/time.js";
 
 //funciones de el reloj
-export function mostrar_configuracion() {
-  let form_clock = document.querySelector(".overlay");
-  form_clock.style.display = "flex";
-}
-
-export function restart_clock() {
-  const clock_localStorage = {
-    repeat: 0,
-    cycle: [],
-  };
-  localStorage.setItem("cycles", JSON.stringify(clock_localStorage));
-  let clock = document.querySelector(".clock_timer_main");
-  clock.textContent = "00:00:00";
-}
-
-export async function run_clock() {
-  let data = JSON.parse(localStorage.getItem("cycles"));
-
-  if (data) {
-    //hacemos que cualquier otro reloj ejecutandose termine
-    if (intervalo) {
-      clearInterval(intervalo);
-    }
-    //ocultar el boton de iniciar y mostrar el boton de pausa
-    swapButtons("#button_clock_iniciar", "#button_clock_pausar");
-
-    let repeats = data.repeat;
-    let cycles = data.cycle;
-    let tipoAlarma = data.tipoAlarma;
-    let body = document.body;
+export const clock = {
+  open_form: () => {
+    let form_clock = document.querySelector(".overlay");
+    form_clock.style.display = "flex";
+  },
+  restart: () => {
+    const clock_localStorage = {
+      repeat: 0,
+      cycle: [],
+    };
+    localStorage.setItem("cycles", JSON.stringify(clock_localStorage));
     let clock = document.querySelector(".clock_timer_main");
+    clock.textContent = "00:00:00";
+  },
+  run: async () => {
+    let data = JSON.parse(localStorage.getItem("cycles"));
 
-    //si no hay reloj para cambiar, dar un error.
-    if (!clock) throw new Error("No se encontró el elemento .clock_timer_main");
-
-    //corremos el reloj en bucle
-    for (let repeat = 0; repeat < repeats; repeat++) {
-      for (let cycle = 0; cycle < cycles.length; cycle++) {
-        await run_timer(cycles[cycle], clock);
-
-        // Disparamos la transicion sonora en el body
-        ejecutarAlarmaInmersiva(tipoAlarma ? Number(tipoAlarma) : 2, body);
+    if (data) {
+      //hacemos que cualquier otro reloj ejecutandose termine
+      if (intervalo) {
+        clearInterval(intervalo);
       }
-    }
-    swapButtons("#button_clock_pausar", "#button_clock_iniciar"); //volvemos a mosta
-  }
+      //ocultar el boton de iniciar y mostrar el boton de pausa
+      swapButtons("#button_clock_iniciar", "#button_clock_pausar");
 
-  function swapButtons(hide, show) {
-    document.querySelector(hide).style.display = "none";
-    document.querySelector(show).style.display = "flex";
-  }
-}
+      let repeats = data.repeat;
+      let cycles = data.cycle;
+      let tipoAlarma = data.tipoAlarma;
+      let body = document.body;
+      let clock = document.querySelector(".clock_timer_main");
+
+      //si no hay reloj para cambiar, dar un error.
+      if (!clock)
+        throw new Error("No se encontró el elemento .clock_timer_main");
+
+      //corremos el reloj en bucle
+      for (let repeat = 0; repeat < repeats; repeat++) {
+        for (let cycle = 0; cycle < cycles.length; cycle++) {
+          await run_timer(cycles[cycle], clock);
+
+          // Disparamos la transicion sonora en el body
+          ejecutarAlarmaInmersiva(tipoAlarma ? Number(tipoAlarma) : 2, body);
+        }
+      }
+      swapButtons("#button_clock_pausar", "#button_clock_iniciar"); //volvemos a mosta
+    }
+
+    function swapButtons(hide, show) {
+      document.querySelector(hide).style.display = "none";
+      document.querySelector(show).style.display = "flex";
+    }
+  },
+  pause: () => {
+    clearInterval(intervalo);
+    document.querySelector("#button_clock_pausar").style.display = "none";
+    document.querySelector("#button_clock_iniciar").style.display = "flex";
+  },
+};
+
 let intervalo;
 export function run_timer(seconds, elemtHtml) {
   return new Promise((resolve) => {
@@ -119,10 +126,4 @@ function ejecutarAlarmaInmersiva(tipo, elementoBody) {
 
 export function localStorage_cycles() {
   console.log(localStorage.getItem("cycles"));
-}
-
-export function pause_clock() {
-  clearInterval(intervalo);
-  document.querySelector("#button_clock_pausar").style.display = "none";
-  document.querySelector("#button_clock_iniciar").style.display = "flex";
 }
