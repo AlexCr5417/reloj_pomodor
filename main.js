@@ -1,6 +1,7 @@
 import { localStorage_cycles, run_timer, clock } from "./functions/reloj.js";
 import { form_configuration } from "./functions/form_configuration.js";
 import { secondsToHHMMSS } from "./utils/time.js";
+import { swapButtons } from "./utils/dom.js";
 
 const buttons_clock = [
   {
@@ -33,6 +34,7 @@ const buttons_clock = [
   },
 ];
 
+//---asignaciones de las funciones a los botones-----
 let buttons_main_container = document.querySelector(".buttons_main_container");
 buttons_clock.forEach((button) => {
   let div = document.createElement("div");
@@ -47,8 +49,6 @@ buttons_clock.forEach((button) => {
     div.addEventListener(button.accion.type, button.accion.function);
   }
 });
-
-//---asignaciones de las funciones a los botones-----
 
 //asignacion de las funciones a los botones del formulario de configuracion
 asignador("#form_clock_footer_button_cancel", "click", () => {

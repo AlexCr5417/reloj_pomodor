@@ -1,5 +1,6 @@
 import { secondsToHHMMSS } from "../utils/time.js";
-
+import { swapButtons } from "../utils/dom.js";
+let intervalo;
 //funciones de el reloj
 export const clock = {
   open_form: () => {
@@ -47,20 +48,13 @@ export const clock = {
       }
       swapButtons("#button_clock_pausar", "#button_clock_iniciar"); //volvemos a mosta
     }
-
-    function swapButtons(hide, show) {
-      document.querySelector(hide).style.display = "none";
-      document.querySelector(show).style.display = "flex";
-    }
   },
   pause: () => {
     clearInterval(intervalo);
-    document.querySelector("#button_clock_pausar").style.display = "none";
-    document.querySelector("#button_clock_iniciar").style.display = "flex";
+    swapButtons("#button_clock_pausar", "#button_clock_iniciar");
   },
 };
 
-let intervalo;
 export function run_timer(seconds, elemtHtml) {
   return new Promise((resolve) => {
     let time = seconds;
