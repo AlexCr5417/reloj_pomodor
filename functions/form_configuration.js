@@ -1,9 +1,9 @@
 //funciones formulario de configuracion
- export const form_configuration = {
+export const form_configuration = {
   //funciones pirncipales
   ocultar: () => {
-    let form_clock = document.querySelector(".overlay");
-    form_clock.style.display = "none";
+    document.querySelector(".overlay").style.display = "none";
+    document.querySelector(".form_clock").style.display = "none";
   },
   reiniciar: () => {
     let container = document.querySelector(".container_cycles");

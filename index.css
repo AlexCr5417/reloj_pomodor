@@ -104,7 +104,7 @@
 .form_clock {
   width: 400px;
   height: 550s0px;
-  display: flex;
+  display: none;
   flex-direction: column;
   background-color: var(--background_color_low);
 }

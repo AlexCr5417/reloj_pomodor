@@ -5,8 +5,8 @@ let intervalo;
 //funciones de el reloj
 export const clock = {
   open_form: () => {
-    let form_clock = document.querySelector(".overlay");
-    form_clock.style.display = "flex";
+    document.querySelector(".overlay").style.display = "flex";
+    document.querySelector(".form_clock").style.display = "flex";
   },
   restart: () => {
     clearInterval(intervalo);
@@ -48,8 +48,19 @@ export const clock = {
           // Disparamos la transicion sonora en el body
           ejecutarAlarmaInmersiva(tipoAlarma ? Number(tipoAlarma) : 2, body);
 
-          //abrimos el mensaje de confirmacion
+          if (cycle != cycles.length - 1) {
+            //abrimos el mensaje de confirmacion
+            cardEndCycle.open();
+            //esperamos a que el usuario confirme que quiere continuar
+            await cardEndCycle.confirmContinue();
+            //cermmas el mensaje de confirmacion
+            cardEndCycle.close();
+          }
+        }
+        if (repeat != repeats - 1) {
           cardEndCycle.open();
+          await cardEndCycle.confirmContinue();
+          cardEndCycle.close();
         }
       }
       swapButtons("#button_clock_pausar", "#button_clock_iniciar"); //volvemos a mosta
