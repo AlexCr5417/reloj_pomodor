@@ -8,7 +8,7 @@ export const clock = {
     document.querySelector(".overlay").style.display = "flex";
     document.querySelector(".form_clock").style.display = "flex";
   },
-  restart: () => {
+  stop: () => {
     clearInterval(intervalo);
     let clock_localStorage = {
       repeat: 0,
@@ -66,8 +66,12 @@ export const clock = {
       swapButtons("#button_clock_pausar", "#button_clock_iniciar"); //volvemos a mosta
     }
   },
-  pause: () => {
+  restart: () => {
     clearInterval(intervalo);
+    swapButtons("#button_clock_pausar", "#button_clock_iniciar");
+    clock.run();
+  },
+  pause: () => {
     swapButtons("#button_clock_pausar", "#button_clock_iniciar");
   },
 };

@@ -10,6 +10,7 @@ const buttons_clock = [
     text: "Editar temporizador",
     iconClass: "bi bi-pencil-square",
     color: "#2563EB",
+    display: "flex",
     accion: { type: "click", function: clock.open_form },
   },
   {
@@ -17,6 +18,7 @@ const buttons_clock = [
     text: "Reiniciar",
     iconClass: "bi bi-arrow-counterclockwise",
     color: "#F59E0B",
+    display: "flex",
     accion: { type: "click", function: clock.restart },
   },
   {
@@ -24,6 +26,7 @@ const buttons_clock = [
     text: "Iniciar",
     iconClass: "bi bi-play-fill",
     color: "#22C55E",
+    display: "flex",
     accion: { type: "click", function: clock.run },
   },
   {
@@ -31,7 +34,16 @@ const buttons_clock = [
     text: "Pausar",
     iconClass: "bi bi-pause-btn-fill",
     color: "#EF4444",
+    display: "none",
     accion: { type: "click", function: clock.pause },
+  },
+  {
+    id: "detener",
+    text: "Detener",
+    iconClass: "bi bi-stop-fill",
+    color: "#9c44ef",
+    display: "flex",
+    accion: { type: "click", function: clock.stop },
   },
 ];
 
@@ -40,7 +52,7 @@ let buttons_main_container = document.querySelector(".buttons_main_container");
 buttons_clock.forEach((button) => {
   let div = document.createElement("div");
   div.id = `button_clock_${button.id}`;
-  div.style.display = "flex";
+  div.style.display = button.display;
   div.classList.add("clock_button");
   div.innerHTML = `<i class="${button.iconClass}" ></i>`;
   //div.textContent = button.text;
