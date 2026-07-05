@@ -1,5 +1,6 @@
 import { secondsToHHMMSS } from "../utils/time.js";
 import { swapButtons } from "../utils/dom.js";
+import { cardEndCycle } from "./cardEndCycle.js";
 let intervalo;
 //funciones de el reloj
 export const clock = {
@@ -8,7 +9,8 @@ export const clock = {
     form_clock.style.display = "flex";
   },
   restart: () => {
-    const clock_localStorage = {
+    clearInterval(intervalo);
+    let clock_localStorage = {
       repeat: 0,
       cycle: [],
     };
@@ -40,10 +42,14 @@ export const clock = {
       //corremos el reloj en bucle
       for (let repeat = 0; repeat < repeats; repeat++) {
         for (let cycle = 0; cycle < cycles.length; cycle++) {
+          //esperamos a que el reloj termine
           await run_timer(cycles[cycle], clock);
 
           // Disparamos la transicion sonora en el body
           ejecutarAlarmaInmersiva(tipoAlarma ? Number(tipoAlarma) : 2, body);
+
+          //abrimos el mensaje de confirmacion
+          cardEndCycle.open();
         }
       }
       swapButtons("#button_clock_pausar", "#button_clock_iniciar"); //volvemos a mosta
