@@ -1,4 +1,4 @@
-import { localStorage_cycles, run_timer, clock } from "./functions/reloj.js";
+import { clock, Alarma, gestorReloj } from "./functions/reloj.js";
 import { form_configuration } from "./functions/form_configuration.js";
 import { secondsToHHMMSS } from "./utils/time.js";
 import { swapButtons } from "./utils/dom.js";
@@ -27,7 +27,10 @@ const buttons_clock = [
     iconClass: "bi bi-play-fill",
     color: "#22C55E",
     display: "flex",
-    accion: { type: "click", function: clock.run },
+    accion: {
+      type: "click",
+      function: gestorReloj,
+    },
   },
   {
     id: "pausar",
@@ -71,7 +74,7 @@ asignador("#form_clock_footer_button_cancel", "click", () => {
 asignador("#form_clock_footer_button_save", "click", () => {
   form_configuration.ocultar();
   form_configuration.guardar();
-  clock.run();
+  gestorReloj();
   console.log(localStorage.getItem("cycles"));
 });
 asignador(".cycle_card_plus", "click", () => {
