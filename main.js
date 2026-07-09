@@ -68,12 +68,12 @@ buttons_clock.forEach((button) => {
 
 //asignacion de las funciones a los botones del formulario de configuracion
 asignador("#form_clock_footer_button_cancel", "click", () => {
-  form_configuration.ocultar();
-  form_configuration.reiniciar();
+  form_configuration.close();
+  form_configuration.restart();
 });
 asignador("#form_clock_footer_button_save", "click", () => {
-  form_configuration.ocultar();
-  form_configuration.guardar();
+  form_configuration.close();
+  form_configuration.save();
   gestorReloj();
   console.log(localStorage.getItem("cycles"));
 });

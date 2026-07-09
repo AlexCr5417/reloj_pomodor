@@ -4,11 +4,11 @@ export const form_configuration = {
     document.querySelector(".overlay").style.display = "flex";
     document.querySelector(".form_clock").style.display = "flex";
   },
-  ocultar: () => {
+  close: () => {
     document.querySelector(".overlay").style.display = "none";
     document.querySelector(".form_clock").style.display = "none";
   },
-  reiniciar: () => {
+  restart: () => {
     let container = document.querySelector(".container_cycles");
     container.innerHTML = `
   <div class="cycle_card" id="cycle_card_1">
@@ -51,7 +51,7 @@ export const form_configuration = {
               </div>
   `;
   },
-  guardar: () => {
+  save: () => {
     //data
     let repeats = Number(document.querySelector(".repeat_number").value);
     // Añado un nuevo dato para capturar el valor de la alarma
@@ -76,7 +76,6 @@ export const form_configuration = {
     };
     localStorage.setItem("cycles", JSON.stringify(clock));
   },
-  //funciones de el ciclo
   cycle: {
     new_card: () => {
       let container = document.querySelector(".container_cycles");
