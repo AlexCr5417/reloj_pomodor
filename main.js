@@ -11,7 +11,7 @@ const buttons_clock = [
     iconClass: "bi bi-pencil-square",
     color: "#2563EB",
     display: "flex",
-    accion: { type: "click", function: clock.open_form },
+    accion: { type: "click", function: form_configuration.open },
   },
   {
     id: "reiniciar",

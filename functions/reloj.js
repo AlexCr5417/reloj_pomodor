@@ -63,10 +63,6 @@ export async function gestorReloj() {
 
 //funciones de el reloj
 export const clock = {
-  open_form: () => {
-    document.querySelector(".overlay").style.display = "flex";
-    document.querySelector(".form_clock").style.display = "flex";
-  },
   stop: () => {
     clearInterval(intervalo);
     let clock_localStorage = {
