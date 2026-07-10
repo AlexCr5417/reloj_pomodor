@@ -1,3 +1,5 @@
+import { HHMMSStoSeconds } from "../utils/time.js";
+import { timer } from "./timer.js";
 //funciones formulario de configuracion
 export const form_configuration = {
   open: () => {
@@ -59,22 +61,25 @@ export const form_configuration = {
       document.querySelector("#alarm_mood")?.value || 2,
     );
     let cyclesOnSeconds = [];
-    document.querySelectorAll(".cycle_card_timer").forEach((cycle, index) => {
+    document.querySelectorAll(".cycle_card_timer").forEach((cycle) => {
       const timers = cycle.querySelectorAll(".cycle_card_timer_content");
       const hours = Number(timers[0].value);
       const minutes = Number(timers[1].value);
       const seconds = Number(timers[2].value);
-      const result = hours * 3600 + minutes * 60 + seconds;
+      const result = HHMMSStoSeconds(`${hours}:${minutes}:${seconds}`);
       cyclesOnSeconds.push(result);
     });
 
-    //resultado
+    //Guardamos los valores en en localStorage => para la persistencia
     let clock = {
       repeat: repeats,
       cycle: cyclesOnSeconds,
       alarmType: alarmaSelected,
     };
     localStorage.setItem("cycles", JSON.stringify(clock));
+
+    //Guardamos los valores en el estatus_clock => para modificarlo
+    timer.assignStatusClock(structuredClone(clock));
   },
   cycle: {
     new_card: () => {

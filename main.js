@@ -1,4 +1,6 @@
-import { clock, Alarma, gestorReloj } from "./functions/reloj.js";
+import { clock } from "./functions/reloj.js";
+import { Alarma } from "./functions/alarm.js";
+import { statusClock, timer } from "./functions/timer.js";
 import { form_configuration } from "./functions/form_configuration.js";
 import { secondsToHHMMSS } from "./utils/time.js";
 import { swapButtons } from "./utils/dom.js";
@@ -29,7 +31,11 @@ const buttons_clock = [
     display: "flex",
     accion: {
       type: "click",
-      function: gestorReloj,
+      function: () => {
+        swapButtons("#button_clock_iniciar", "#button_clock_pausar");
+        clock.run();
+        
+      },
     },
   },
   {
@@ -74,8 +80,10 @@ asignador("#form_clock_footer_button_cancel", "click", () => {
 asignador("#form_clock_footer_button_save", "click", () => {
   form_configuration.close();
   form_configuration.save();
-  gestorReloj();
+  clock.run();
+  swapButtons("#button_clock_iniciar", "#button_clock_pausar");
   console.log(localStorage.getItem("cycles"));
+  console.log(statusClock);
 });
 asignador(".cycle_card_plus", "click", () => {
   form_configuration.cycle.new_card();
