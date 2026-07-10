@@ -1,5 +1,7 @@
 import { HHMMSStoSeconds } from "../utils/time.js";
 import { timer } from "./timer.js";
+import { changeText } from "../utils/dom.js";
+
 //funciones formulario de configuracion
 export const form_configuration = {
   open: () => {
@@ -69,6 +71,12 @@ export const form_configuration = {
       const result = HHMMSStoSeconds(`${hours}:${minutes}:${seconds}`);
       cyclesOnSeconds.push(result);
     });
+
+    //actualizar el reloj en el dom
+    changeText(
+      ".clock_cycles_main",
+      `Circuito 0/${repeats} | bloque 0/${cyclesOnSeconds.length}`,
+    );
 
     //Guardamos los valores en en localStorage => para la persistencia
     let clock = {

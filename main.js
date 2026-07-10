@@ -3,7 +3,7 @@ import { Alarma } from "./functions/alarm.js";
 import { statusClock, timer } from "./functions/timer.js";
 import { form_configuration } from "./functions/form_configuration.js";
 import { secondsToHHMMSS } from "./utils/time.js";
-import { swapButtons } from "./utils/dom.js";
+import { swapButtons, changeText} from "./utils/dom.js";
 import { cardEndCycle } from "./functions/cardEndCycle.js";
 
 const buttons_clock = [

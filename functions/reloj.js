@@ -1,5 +1,5 @@
 import { secondsToHHMMSS } from "../utils/time.js";
-import { swapButtons } from "../utils/dom.js";
+import { swapButtons, changeText } from "../utils/dom.js";
 import { cardEndCycle } from "./cardEndCycle.js";
 import { Alarma } from "./alarm.js";
 import { timer, statusClock } from "./timer.js";
@@ -19,6 +19,11 @@ export const clock = {
       //corremos el reloj en bucle
       for (let repeat = 0; repeat < repeats; repeat++) {
         for (let cycle = 0; cycle < cyclesLength; cycle++) {
+          //actualizar el reloj en el dom
+          changeText(
+            ".clock_cycles_main",
+            `Circuito ${repeat + 1}/${repeats} | bloque ${cycle + 1}/${cyclesLength}`,
+          );
           //esperamos a que el reloj termine
           await timer.run(clockMain);
 
@@ -27,6 +32,9 @@ export const clock = {
         }
         timer.assignStatusClock({ repeat: data.repeat--, cycle: data.cycle });
       }
+
+      //actualizar el reloj en el dom
+      changeText(".clock_cycles_main", `Circuito 0/0 | bloque 0/0`);
     }
   },
   stop: () => {
@@ -38,6 +46,8 @@ export const clock = {
     localStorage.setItem("cycles", JSON.stringify(clock_localStorage));
     let clock = document.querySelector(".clock_timer_main");
     clock.textContent = "00:00:00";
+    //actualizar el reloj en el dom
+    changeText(".clock_cycles_main", `Circuito 0/0 | bloque 0/0`);
   },
   restart: () => {
     timer.stop();
