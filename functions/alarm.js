@@ -1,17 +1,17 @@
 // Instancias de los archivos MP3
 export const pistasAlarma = {
   1: {
-    audio: new Audio("./sounds/zen.mp3"),
+    audio: new Audio("./assets/sounds/zen.mp3"),
     clase: "flash-zen",
     tiempo: 4000,
   },
   2: {
-    audio: new Audio("./sounds/ringtones-bojack-openingcredit.mp3"),
+    audio: new Audio("./assets/sounds/ringtones-bojack-openingcredit.mp3"),
     clase: null,
     tiempo: null,
   },
   3: {
-    audio: new Audio("./sounds/fuerte.mp3"),
+    audio: new Audio("./assets/sounds/fuerte.mp3"),
     clase: "flash-alert",
     tiempo: 2500,
   },

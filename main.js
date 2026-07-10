@@ -3,22 +3,31 @@ import { Alarma } from "./functions/alarm.js";
 import { statusClock, timer } from "./functions/timer.js";
 import { form_configuration } from "./functions/form_configuration.js";
 import { secondsToHHMMSS } from "./utils/time.js";
-import { swapButtons, changeText} from "./utils/dom.js";
+import { swapButtons, changeText } from "./utils/dom.js";
 import { cardEndCycle } from "./functions/cardEndCycle.js";
+import { icons } from "./assets/icons.js";
 
 const buttons_clock = [
   {
     id: "editar",
     text: "Editar temporizador",
-    iconClass: "bi bi-pencil-square",
+    icon: icons.edit,
     color: "#2563EB",
     display: "flex",
     accion: { type: "click", function: form_configuration.open },
   },
   {
+    id: "atras",
+    text: "Atras",
+    icon: icons.back,
+    color: "#F59E0B",
+    display: "flex",
+    accion: null,
+  },
+  {
     id: "reiniciar",
     text: "Reiniciar",
-    iconClass: "bi bi-arrow-counterclockwise",
+    icon: icons.restart,
     color: "#F59E0B",
     display: "flex",
     accion: { type: "click", function: clock.restart },
@@ -26,7 +35,7 @@ const buttons_clock = [
   {
     id: "iniciar",
     text: "Iniciar",
-    iconClass: "bi bi-play-fill",
+    icon: icons.play,
     color: "#22C55E",
     display: "flex",
     accion: {
@@ -34,14 +43,13 @@ const buttons_clock = [
       function: () => {
         swapButtons("#button_clock_iniciar", "#button_clock_pausar");
         clock.run();
-        
       },
     },
   },
   {
     id: "pausar",
     text: "Pausar",
-    iconClass: "bi bi-pause-btn-fill",
+    icon: icons.pause,
     color: "#EF4444",
     display: "none",
     accion: { type: "click", function: clock.pause },
@@ -49,10 +57,18 @@ const buttons_clock = [
   {
     id: "detener",
     text: "Detener",
-    iconClass: "bi bi-stop-fill",
+    icon: icons.stop,
     color: "#9c44ef",
     display: "flex",
     accion: { type: "click", function: clock.stop },
+  },
+  {
+    id: "adelante",
+    text: "Adelante",
+    icon: icons.forward,
+    color: "#9c44ef",
+    display: "flex",
+    accion: null,
   },
 ];
 
@@ -63,10 +79,10 @@ buttons_clock.forEach((button) => {
   div.id = `button_clock_${button.id}`;
   div.style.display = button.display;
   div.classList.add("clock_button");
-  div.innerHTML = `<i class="${button.iconClass}" ></i>`;
+  div.innerHTML = button.icon;
   //div.textContent = button.text;
   buttons_main_container.append(div);
-  div.style.backgroundColor = `${button.color}`;
+  // div.style.backgroundColor = `${button.color}`;
   if (button.accion) {
     div.addEventListener(button.accion.type, button.accion.function);
   }
