@@ -122,14 +122,28 @@ svg {
   background-color: var(--background_color_low);
 }
 .form_clock_header {
+  padding: 0px 8px 0px 8px;
   background-color: var(--background_color);
   height: 50px;
   display: flex;
+  align-items: center;
 }
 .form_clock_header_title {
   width: calc(550px - 50px);
   font-size: 20px;
   align-content: center;
+}
+.form_clock_header_close {
+  width: 50px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+.form_clock_header_close:hover{
+  cursor: pointer;
+  background-color: var(--background_color_low_opacity);
 }
 .form_clock_header_button {
   height: 50px;

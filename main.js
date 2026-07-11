@@ -73,6 +73,8 @@ const buttons_clock = [
 ];
 
 //---asignaciones de las funciones a los botones-----
+
+//botones del reloj
 let buttons_main_container = document.querySelector(".buttons_main_container");
 buttons_clock.forEach((button) => {
   let div = document.createElement("div");
@@ -88,7 +90,7 @@ buttons_clock.forEach((button) => {
   }
 });
 
-//asignacion de las funciones a los botones del formulario de configuracion
+//botones del formulario de configuracion
 asignador("#form_clock_footer_button_cancel", "click", () => {
   form_configuration.close();
   form_configuration.restart();
@@ -103,6 +105,10 @@ asignador("#form_clock_footer_button_save", "click", () => {
 });
 asignador(".cycle_card_plus", "click", () => {
   form_configuration.cycle.new_card();
+});
+document.querySelector(".form_clock_header_close").innerHTML = icons.close;
+asignador(".form_clock_header_close", "click", () => {
+  form_configuration.close();
 });
 
 // document.addEventListener("DOMContentLoaded", () => {
